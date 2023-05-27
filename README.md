@@ -24,7 +24,18 @@ Please note that you must ensure the image file ('lena.jpg' in the example) is i
 This code is written in MATLAB and does not require any additional toolboxes.
 
 ## Observations
-During my experiments, I observed that the Discrete Fourier Transform (DFT) tends to perform better with continuous noise compared to impulse noise. This is because the DFT is based on the assumption that the signal is periodic and continuous, which is not the case with impulse noise. The impulse noise appears as scattered points in the frequency domain, making it challenging to isolate using a basic filtering technique.
+During my experiments, I observed that the Discrete Fourier Transform (DFT) tends to perform better with periodic noise compared to impulse noise. This is because the DFT is based on the assumption that the signal is periodic and continuous, which is not the case with impulse noise. The impulse noise appears as scattered points in the frequency domain, making it challenging to isolate using a basic filtering technique.
+
+## Result
+### Periodic noise
+![Alt Text](https://github.com/Potassium-chromate/Fourier-Transform-based-Image-Denoising/blob/main/pictures/continuous%20noise/original%20noise.jpg)  
+![Alt Text](https://github.com/Potassium-chromate/Fourier-Transform-based-Image-Denoising/blob/main/pictures/continuous%20noise/DFT%20visualize.jpg)  
+![Alt Text](https://github.com/Potassium-chromate/Fourier-Transform-based-Image-Denoising/blob/main/pictures/continuous%20noise/continuous%20noise.jpg)  
+
+### Impulse noise
+![Alt Text](https://github.com/Potassium-chromate/Fourier-Transform-based-Image-Denoising/blob/main/pictures/impulse%20noise/original%20noise.jpg)  
+![Alt Text](https://github.com/Potassium-chromate/Fourier-Transform-based-Image-Denoising/blob/main/pictures/impulse%20noise/DFT%20visualize.jpg)  
+![Alt Text](https://github.com/Potassium-chromate/Fourier-Transform-based-Image-Denoising/blob/main/pictures/impulse%20noise/impulse%20noise.jpg) 
 
 ## Disclaimer
 This is a simple demonstration of image denoising using the Fourier Transform. The quality of denoising might not be perfect, especially for real-world noisy images. For more advanced noise reduction techniques, consider using methods such as wavelet transform or deep learning-based approaches.

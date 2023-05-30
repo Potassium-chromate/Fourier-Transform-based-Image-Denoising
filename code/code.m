@@ -9,15 +9,16 @@ img = imread('lena.jpg');
 img = im2double(img);
 
 % filter size
-r = 20;
+r = 30;
 % add noise
 % add_random_noise_points(img ,num of point , val of the noise point) 
-noise_img = add_random_noise_points(img,50,1); 
-noise_img = add_noise(img,r);
+noise_img_dots = add_random_noise_points(img,100,0); 
+noise_img = add_noise(img,10);
 
 figure();
-subplot(1,2,1),imshow(img);title('original image')
-subplot(1,2,2),imshow(noise_img);title('noisy image')
+subplot(1,3,1),imshow(img);title('original image')
+subplot(1,3,2),imshow(noise_img);title('noisy image')
+subplot(1,3,3),imshow(noise_img_dots);title('noisy image(dots)')
 %% Fourier transform the original image
 F_oriimg = dft2(img(:,:,1));
 % center shift
@@ -29,15 +30,22 @@ log_FToriimg = my_mat2gray(log_FToriimg);
 
 
 figure();
-subplot(2,2,1),imshow(log_FToriimg);title('log FT original image')
+subplot(4,2,1),imshow(log_FToriimg);title('log FT original image')
 
 %% Implement Fourier transform on noisy images
+% period noise
 F_img = dft2(noise_img(:,:,1));
 F_mag = my_fftshift2(F_img);
 log_FTimage = log(1+abs(F_mag));
 log_FTimage = my_mat2gray(log_FTimage);
+% dots
+F_img_d = dft2(noise_img_dots(:,:,1));
+F_mag_d = my_fftshift2(F_img_d);
+log_FTimage_d = log(1+abs(F_mag_d));
+log_FTimage_d = my_mat2gray(log_FTimage_d);
 
-subplot(2,2,2),imshow(log_FTimage);title('log FT noisy image')
+subplot(4,2,2),imshow(log_FTimage);title('log FT noisy image')
+subplot(4,2,5),imshow(log_FTimage_d);title('log FT noisy image(dots)')
 
 %% Creat a filter
 % get the size of the input image
@@ -46,29 +54,45 @@ subplot(2,2,2),imshow(log_FTimage);title('log FT noisy image')
 filter = zeros(m,n);
 filter(r:m-r,r:n-r) =1;
 
-subplot(2,2,3),imshow(filter,[]);title('filter')
+subplot(4,2,3),imshow(filter,[]);title('filter')
+subplot(4,2,6),imshow(filter,[]);title('filter(dots)')
 
 %% Filter out the denoised image
 % FT image .* the filter
+% period noise
 fil_img = F_mag.*filter; 
 
 log_fil_img = log(1+abs(fil_img));
 log_fil_img = my_mat2gray(log_fil_img);
+% dots
+fil_img_d = F_mag_d.*filter; 
 
-subplot(2,2,4),imshow(log_fil_img);title('after filter FT image')
+log_fil_img_d = log(1+abs(fil_img_d));
+log_fil_img_d = my_mat2gray(log_fil_img_d);
 
+subplot(4,2,4),imshow(log_fil_img);title('after filter FT image')
+subplot(4,2,7),imshow(log_fil_img_d);title('after filter FT image (dots)')
 %% Inverse Fourier transform
 % unshift
 fil_img = my_ifftshift2(fil_img); 
 % display the denoised image
+
 result = real(idft2(fil_img)); 
 result = my_mat2gray(result);
 result_rgb = three_channel_denoise(noise_img,r);
-figure();
-subplot(1,3,1),imshow(noise_img);title('noisy image')
-subplot(1,3,2);imshow(result,[]);title('denoised image')
-subplot(1,3,3);imshow(result_rgb);title('denoised RGBimage')
+%dots
+fil_img_d = my_ifftshift2(fil_img_d); 
+result_d = real(idft2(fil_img_d)); 
+result_d = my_mat2gray(result_d);
+result_rgb_d = three_channel_denoise(noise_img_dots,r);
 
+figure();
+subplot(2,3,1),imshow(noise_img);title('noisy image')
+subplot(2,3,2);imshow(result,[]);title('denoised image')
+subplot(2,3,3);imshow(result_rgb);title('denoised RGBimage')
+subplot(2,3,4),imshow(noise_img_dots);title('noisy image(dots)')
+subplot(2,3,5);imshow(result_d,[]);title('denoised image(dots)')
+subplot(2,3,6);imshow(result_rgb_d);title('denoised RGBimage(dots)')
 %% function
 % fft
 function X = dft1(x)

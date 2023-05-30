@@ -12,7 +12,7 @@ img = im2double(img);
 r = 30;
 % add noise
 % add_random_noise_points(img ,num of point , val of the noise point) 
-noise_img_dots = add_random_noise_points(img,100,0); 
+noise_img_dots = add_random_noise_points(img,100,1); 
 noise_img = add_noise(img,10);
 
 figure();
